@@ -1,6 +1,6 @@
 import BrandCarousel from "./BrandCarousel";
 import BrandInformation from "./BrandInformation";
-import CustomerFeedBack from "./CustomerFeedback";
+import CustomerFeedBack from "./CustomerFeedBack";
 import HeroSlider from "./HeroSlider";
 import ProductSearch from "./ProductSearch";
 import ShopByCategory from "./ShopByCategory";
