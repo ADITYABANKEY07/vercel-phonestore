@@ -1,20 +1,32 @@
-import mongoose from "mongoose";
+// models/Product.js
+import mongoose from 'mongoose';
 
-const reviewSchema = new mongoose.Schema({
-    name: {
-        type: String,
-        required: true
-    },
-    rating: {
-        type: Number,
-        required: true
-    },
-    comment: {
-        type: String,
-        required: true
-    }
-})
+const productSchema = new mongoose.Schema({
+  brand: {
+    type: String,
+    required: true,
+  },
+  model: {
+    type: String,
+    required: true,
+  },
+  price: {
+    type: Number,
+    required: true,
+  },
+  description: String,
+  comment: String,
+  rating: Number,
+  image: String,
+  category: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Category',
+    required: true,
+  },
+  subCategory: {
+    type: String,
+  },
+  // ---------------------
+}, { timestamps: true });
 
-const Review = mongoose.model('Review', reviewSchema);
-
-export default Review;
+export default mongoose.model('Product', productSchema);

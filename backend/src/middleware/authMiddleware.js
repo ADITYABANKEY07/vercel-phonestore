@@ -1,0 +1,45 @@
+import jwt from 'jsonwebtoken';
+import User from '../models/User.js';
+
+export const protect = async (req, res, next) => {
+  let token;
+
+  if (
+    req.headers.authorization &&
+    req.headers.authorization.startsWith('Bearer ')
+  ) {
+    try {
+      token = req.headers.authorization.split(' ')[1];
+
+      if (!token || token === 'undefined') {
+        throw new Error('Token is undefined or malformed');
+      }
+
+      const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+      // ✅ You already have this correct:
+      req.user = await User.findById(decoded.userId).select('-password');
+
+      if (!req.user) {
+        throw new Error('User not found with this token');
+      }
+
+      next();
+    } catch (err) {
+      console.error('Token verification failed:', err.message);
+      return res.status(401).json({ message: 'Not authorized, token failed' });
+    }
+  } else {
+    return res.status(401).json({ message: 'Not authorized, no token' });
+  }
+};
+
+export const admin = (req, res, next) => {
+  if (req.user && req.user.isAdmin) {
+    next();
+  } else {
+    return res.status(403).json({ message: 'Not authorized as admin' });
+  }
+};
+
+export default { protect, admin };
