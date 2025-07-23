@@ -1,3 +1,4 @@
+const BASE_URL = import.meta.env.VITE_API_URL;
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
@@ -5,7 +6,7 @@ function AdminOrderManager() {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true); // Add loading state
   const [error, setError] = useState(null); // Add error state
-  const BASE_URL = 'http://localhost:3001/api';
+  const ADMIN_URL = `${BASE_URL}/api`;
 
   useEffect(() => {
     const fetchOrders = async () => {
@@ -31,7 +32,7 @@ function AdminOrderManager() {
 
         console.log('🚀 Frontend: Attempting to fetch orders with token:', token);
 
-        const res = await axios.get(`${BASE_URL}/orders`, {
+        const res = await axios.get(`${ADMIN_URL}/orders`, {
           headers: { Authorization: `Bearer ${token}` },
         });
 

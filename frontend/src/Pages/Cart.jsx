@@ -1,3 +1,4 @@
+const BASE_URL = import.meta.env.VITE_API_URL;
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
@@ -20,7 +21,7 @@ import { useNavigate, Link } from "react-router-dom";
 
   const fetchCartItems = async (token) => {
     try {
-      const res = await axios.get("http://localhost:3001/api/cart", {
+      const res = await axios.get(`${BASE_URL}/api/cart`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setCartItems(res.data.items || []);

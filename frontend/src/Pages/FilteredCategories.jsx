@@ -1,7 +1,8 @@
+const BASE_URL = import.meta.env.VITE_API_URL;
 import React, { useEffect, useState } from 'react';
 
 export default function FilteredCategory() {
-  const BASE_URL = 'http://localhost:3001/api'; // Ensure this matches your backend port
+  const BASE_URL = `${BASE_URL}/api`; // Ensure this matches your backend port
   const [products, setProducts] = useState([]);
   const [loadingProducts, setLoadingProducts] = useState(true);
   const [error, setError] = useState(null);

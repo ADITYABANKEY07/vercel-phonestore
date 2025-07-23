@@ -1,3 +1,4 @@
+const BASE_URL = import.meta.env.VITE_API_URL;
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useLocation, Link } from "react-router-dom";
@@ -26,7 +27,7 @@ useEffect(() => {
       if (category) queryParams.append("category", category); // ✅ use it here
 
       const response = await axios.get(
-        `http://localhost:3001/api/products/filter?${queryParams.toString()}`
+        `${BASE_URL}/api/products/filter?${queryParams.toString()}`
       );
 
       setProducts(response.data);

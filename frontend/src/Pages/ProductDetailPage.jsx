@@ -1,3 +1,4 @@
+const BASE_URL = import.meta.env.VITE_API_URL;
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -36,7 +37,7 @@ const handleAddToCart = async () => {
 
   try {
     await axios.post(
-      'http://localhost:3001/api/cart/add',
+      `${BASE_URL}/api/cart/add`,
       {
         productId: product._id,
         quantity: 1,

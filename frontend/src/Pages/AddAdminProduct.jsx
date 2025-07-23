@@ -1,3 +1,4 @@
+const BASE_URL = import.meta.env.VITE_API_URL;
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
@@ -16,7 +17,7 @@ export default function AddAdminProduct() {
     subCategory: '',
   });
 
-  const BASE_URL = 'http://localhost:3001/api';
+  const ADMIN_URL = `{BASE_URL}/api`;
 
   const getToken = () => {
     const user = JSON.parse(localStorage.getItem('user'));
@@ -29,12 +30,12 @@ export default function AddAdminProduct() {
   }, []);
 
   const fetchProducts = async () => {
-    const res = await axios.get(`${BASE_URL}/products`);
+    const res = await axios.get(`${ADMIN_URL}/products`);
     setProducts(res.data);
   };
 
   const fetchCategories = async () => {
-    const res = await axios.get(`${BASE_URL}/categories`);
+    const res = await axios.get(`${ADMIN_URL}/categories`);
     setCategories(res.data);
   };
 
@@ -75,9 +76,9 @@ export default function AddAdminProduct() {
 
     try {
       if (editingProduct) {
-        await axios.put(`${BASE_URL}/products/${editingProduct}`, form, config);
+        await axios.put(`${ADMIN_URL}/products/${editingProduct}`, form, config);
       } else {
-        await axios.post(`${BASE_URL}/products`, form, config);
+        await axios.post(`${ADMIN_URL}/products`, form, config);
       }
 
       setForm({
@@ -108,7 +109,7 @@ export default function AddAdminProduct() {
     };
 
     try {
-      await axios.delete(`${BASE_URL}/products/${id}`, config);
+      await axios.delete(`${ADMIN_URL}/products/${id}`, config);
       fetchProducts();
     } catch (error) {
       console.error("Error deleting product:", error.response?.data || error.message);

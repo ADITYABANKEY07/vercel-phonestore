@@ -1,3 +1,4 @@
+const BASE_URL = import.meta.env.VITE_API_URL;
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
@@ -15,7 +16,7 @@ function SubCategoryFilter() {
         setError(null);
 
         const response = await axios.get(
-          `http://localhost:3001/api/products/category/${categoryName}/${subCategory}`
+          `${BASE_URL}/api/products/category/${categoryName}/${subCategory}`
         );
 
         setProducts(response.data);

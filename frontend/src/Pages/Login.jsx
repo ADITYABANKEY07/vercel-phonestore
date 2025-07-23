@@ -1,4 +1,5 @@
 // src/Pages/Login.jsx
+const BASE_URL = import.meta.env.VITE_API_URL;
 import { useState } from "react";
 import axios from "axios";
 import { useNavigate, useLocation } from "react-router-dom";
@@ -25,8 +26,8 @@ function Login() {
 
     try {
       const url = isLogin
-        ? "http://localhost:3001/users/login"
-        : "http://localhost:3001/users/signup";
+        ? `${BASE_URL}/users/login`
+        : `${BASE_URL}/users/signup`;
 
       const dataToSend = isLogin
         ? { email: form.email, password: form.password }
@@ -36,13 +37,12 @@ function Login() {
 
       const { token, user } = res.data;
 
-if (token && user) {
-  localStorage.setItem("user", JSON.stringify({ ...user, token })); // ✅ Combine token into user object
-  window.dispatchEvent(new Event("userChanged")); // ✅ notify nav or others
-} else {
-  throw new Error("Invalid token or user data");
-}
-
+      if (token && user) {
+        localStorage.setItem("user", JSON.stringify({ ...user, token })); // ✅ Combine token into user object
+        window.dispatchEvent(new Event("userChanged")); // ✅ notify nav or others
+      } else {
+        throw new Error("Invalid token or user data");
+      }
 
       const redirect =
         new URLSearchParams(location.search).get("redirect") || "/";

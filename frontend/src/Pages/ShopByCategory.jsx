@@ -1,8 +1,9 @@
+const BASE_URL = import.meta.env.VITE_API_URL;
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 export default function ShopByCategoryTabs() {
-  const BASE_URL = "http://localhost:3001/api";
+  const SHOP_URL = `${BASE_URL}/api`;
 
   const [categories, setCategories] = useState([]);
   const [activeTab, setActiveTab] = useState(null);
@@ -18,7 +19,7 @@ export default function ShopByCategoryTabs() {
     const fetchCategories = async () => {
       setLoading(true);
       try {
-        const res = await fetch(`${BASE_URL}/categories`);
+        const res = await fetch(`${SHOP_URL}/categories`);
         if (!res.ok) throw new Error(`Error: ${res.status}`);
         const data = await res.json();
         console.log("Fetched categories:", data); // Debug log

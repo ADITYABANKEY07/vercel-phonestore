@@ -1,3 +1,4 @@
+const BASE_URL = import.meta.env.VITE_API_URL;
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -33,7 +34,7 @@ const CheckoutPage = () => {
 
   const fetchCart = async (token) => {
     try {
-      const res = await axios.get("http://localhost:3001/api/cart/", {
+      const res = await axios.get(`${BASE_URL}/api/cart/`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -112,7 +113,7 @@ const CheckoutPage = () => {
       });
 
       const response = await axios.post(
-        "http://localhost:3001/api/orders/verify",
+        `${BASE_URL}/api/orders/verify`,
         {
           razorpay_order_id: paymentData.razorpay_order_id,
           razorpay_payment_id: paymentData.razorpay_payment_id,
@@ -176,7 +177,7 @@ const CheckoutPage = () => {
       const amountInPaise = convertToPaise(totalAmount);
 
       const { data: order } = await axios.post(
-        "http://localhost:3001/api/payment/create-order",
+        `${BASE_URL}/api/payment/create-order`,
         { amount: amountInPaise },
         {
           headers: { Authorization: `Bearer ${user.token}` },
