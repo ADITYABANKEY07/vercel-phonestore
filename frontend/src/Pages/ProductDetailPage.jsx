@@ -62,7 +62,7 @@ const handleAddToCart = async () => {
       try {
         setLoading(true);
         setError("");
-        const response = await axios.get(`http://localhost:3001/api/products/${id}`);
+        const response = await axios.get(`${BASE_URL}/api/products/${id}`);
         setProduct(response.data);
       } catch (err) {
         setError(err.message);
