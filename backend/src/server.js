@@ -1,12 +1,33 @@
+// server.js
+import dotenv from 'dotenv';
+dotenv.config();
 import express from 'express';
 import cors from 'cors';
-import dotenv from 'dotenv';
-import mongoose from 'mongoose';
-// Import routes and any other middlewares
+import connectDB from './config/db.js'; // Your database connection
+// import razorpay from './config/razorpay.js'; // Not directly used here, but good to know it's there
 
-dotenv.config();
+// Import your route files
+import userRoutes from './routes/userRoutes.js';
+import productRoutes from './routes/productRoutes.js';
+import categoryRoutes from './routes/categoryRoutes.js';
+import cartRoutes from './routes/cartRoutes.js';
+import paymentRoutes from './routes/paymentRoutes.js'; // Your payment routes
+import orderRoutes from './routes/orderRoutes.js';
+
+
+
+
+// Connect to MongoDB database
+connectDB();
+
+// Initialize Express app
 const app = express();
 
+// Define the port to listen on
+const port = process.env.PORT || 3001; // Defaults to 5000 if PORT is not set in .env
+
+// Middleware
+// Enable CORS for all routes (important for frontend-backend communication)
 const allowedOrigins = [
   'http://localhost:5173',
   'https://vercel-phonestore.vercel.app', // ✅ Your Vercel frontend domain
@@ -24,21 +45,28 @@ app.use(cors({
   credentials: true, // Optional if you're using cookies/auth
 }));
 
+// Parse incoming JSON requests
 app.use(express.json());
+// Parse URL-encoded data (if you have form submissions)
+app.use(express.urlencoded({ extended: true }));
 
-// ✅ Your routes go here
-app.use('/api/categories', categoryRoutes);
+// --- API Routes ---
+// Mount your specific route modules
+app.use('/users', userRoutes);
 app.use('/api/products', productRoutes);
-// ...etc
+app.use('/api/categories', categoryRoutes);
+app.use('/api/cart', cartRoutes);
+app.use('/api/payment', paymentRoutes); // Mount the payment routes
+app.use('/api/orders', orderRoutes);
 
-const PORT = process.env.PORT || 3001;
 
-mongoose.connect(process.env.MONGO_URL)
-  .then(() => {
-    app.listen(PORT, () => {
-      console.log(`🚀 Server running on http://localhost:${PORT}`);
-    });
-  })
-  .catch((err) => {
-    console.error('❌ MongoDB connection failed:', err);
-  });
+// Basic route for testing server status
+app.get('/', (req, res) => {
+  res.send('API is running...');
+});
+
+// Start the server
+app.listen(port, () => {
+  console.log(`🚀 Server running on http://localhost:${port}`);
+  console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
+});
