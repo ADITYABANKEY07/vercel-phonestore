@@ -26,9 +26,24 @@ const app = express();
 // Define the port to listen on
 const port = process.env.PORT || 3001; // Defaults to 5000 if PORT is not set in .env
 
+const allowedOrigins = [
+  'http://localhost:5173',
+  'https://vercel-phonestore-op04v7qwe-aditya-bankeys-projects.vercel.app',
+];
+
 // Middleware
 // Enable CORS for all routes (important for frontend-backend communication)
-app.use(cors());
+app.use(cors({
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('CORS not allowed from this origin'));
+    }
+  },
+  credentials: true,
+}));
+
 // Parse incoming JSON requests
 app.use(express.json());
 // Parse URL-encoded data (if you have form submissions)
