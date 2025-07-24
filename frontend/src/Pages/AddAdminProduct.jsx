@@ -17,7 +17,7 @@ export default function AddAdminProduct() {
     subCategory: '',
   });
 
-  const ADMIN_URL = `{BASE_URL}/api`;
+  const ADMIN_URL = `${BASE_URL}/api`;
 
   const getToken = () => {
     const user = JSON.parse(localStorage.getItem('user'));
