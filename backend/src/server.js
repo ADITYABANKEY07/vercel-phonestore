@@ -28,7 +28,7 @@ const port = process.env.PORT || 3001; // Defaults to 5000 if PORT is not set in
 
 const allowedOrigins = [
   'http://localhost:5173',
-  'https://vercel-phonestore-op04v7qwe-aditya-bankeys-projects.vercel.app',
+  'https://vercel-phonestore-lclh5m5q1-aditya-bankeys-projects.vercel.app',
 ];
 
 // Middleware
