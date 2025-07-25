@@ -86,16 +86,29 @@ function Navbar() {
         )}
 
         {/* Responsive Logo */}
-        <Link
-          to="/"
-          className={`text-3xl font-extrabold text-gray-900 dark:text-white hover:scale-105 transition-transform duration-300 ${
-            isMobile
-              ? "absolute left-1/2 transform -translate-x-1/2"
-              : "static transform-none"
-          }`}
-        >
-          eCommerce
-        </Link>
+        {isAdminRoute ? (
+          <span
+            className={`text-3xl font-extrabold text-gray-900 dark:text-white cursor-not-allowed ${
+              isMobile
+                ? "absolute left-1/2 transform -translate-x-1/2"
+                : "static transform-none"
+            }`}
+            title="You're in admin mode"
+          >
+            eCommerce
+          </span>
+        ) : (
+          <Link
+            to="/"
+            className={`text-3xl font-extrabold text-gray-900 dark:text-white hover:scale-105 transition-transform duration-300 ${
+              isMobile
+                ? "absolute left-1/2 transform -translate-x-1/2"
+                : "static transform-none"
+            }`}
+          >
+            eCommerce
+          </Link>
+        )}
 
         {/* Desktop Navigation Links */}
         <div className="hidden md:flex items-center justify-center flex-grow space-x-8 text-lg font-medium">
