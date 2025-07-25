@@ -4,3 +4,17 @@
   @apply w-full p-2 border rounded;
 }
 
+
+.dot {
+  transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.dot.active {
+  width: 2.5rem;
+  border-radius: 1.25rem;
+  background: white; /* Or your accent color */
+}
+.dot.inactive {
+  width: 1rem;
+  background: #cbd5e1; /* Gray-300 for Tailwind, for example */
+}
+
