@@ -24,12 +24,9 @@ function Navbar() {
   const [user, setUser] = useState(getLoggedInUser);
 
   useEffect(() => {
-    const handleStorageChange = () => {
-      setUser(getLoggedInUser());
-    };
-    const handleUserChange = () => {
-      setUser(getLoggedInUser());
-    };
+    const handleStorageChange = () => setUser(getLoggedInUser());
+    const handleUserChange = () => setUser(getLoggedInUser());
+
     window.addEventListener("storage", handleStorageChange);
     window.addEventListener("userChanged", handleUserChange);
     return () => {
@@ -59,12 +56,12 @@ function Navbar() {
 
   const navLinkClasses =
     "relative text-gray-700 dark:text-gray-200 hover:text-blue-600 dark:hover:text-white transition-colors duration-300 before:absolute before:inset-x-0 before:bottom-0 before:h-0.5 before:bg-blue-500 before:scale-x-0 before:origin-left before:transition-transform before:duration-300 hover:before:scale-x-100";
+
   const mobileNavLinkClasses =
     "block px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-blue-600 rounded-md transition-colors duration-300";
 
-  const isAdminRoute = location.pathname.startsWith("/admin");
-  const isAdmin = user && user.isAdmin;
-  const shouldShowAdminOnlyNav = isAdmin && isAdminRoute;
+  const isAdmin = user?.isAdmin;
+  const hidePublicNav = isAdmin;
 
   return (
     <nav className="bg-white shadow-lg sticky top-0 z-50 dark:bg-gradient-to-r from-blue-500 to-indigo-600">
@@ -86,7 +83,7 @@ function Navbar() {
         )}
 
         {/* Responsive Logo */}
-        {isAdminRoute ? (
+        {hidePublicNav ? (
           <span
             className={`text-3xl font-extrabold text-gray-900 dark:text-white cursor-not-allowed ${
               isMobile
@@ -112,41 +109,36 @@ function Navbar() {
 
         {/* Desktop Navigation Links */}
         <div className="hidden md:flex items-center justify-center flex-grow space-x-8 text-lg font-medium">
-          {shouldShowAdminOnlyNav ? (
-            <Link to="/admin" className={navLinkClasses}>Admin Dashboard</Link>
-          ) : (
+          {!hidePublicNav ? (
             <>
               <Link to="/" className={navLinkClasses}>Home</Link>
               <Link to="/shop" className={navLinkClasses}>Shop</Link>
               <Link to="/contact" className={navLinkClasses}>Contact</Link>
               <Link to="/about" className={navLinkClasses}>About</Link>
-              {isAdmin && !isAdminRoute && (
-                <Link to="/admin" className={navLinkClasses}>Admin Dashboard</Link>
-              )}
             </>
+          ) : (
+            <Link to="/admin" className={navLinkClasses}>Admin Dashboard</Link>
           )}
         </div>
 
         {/* Right-side Actions */}
-        <div>
-          {/* Mobile: Cart only */}
-          <div className="flex md:hidden items-center gap-4">
-            {!shouldShowAdminOnlyNav && (
-              <Link to="/cart" className="text-2xl text-gray-700 dark:text-white hover:scale-110 transition-transform duration-300" aria-label="Shopping Cart">
-                <FaCartShopping />
-              </Link>
-            )}
-          </div>
+        <div className="flex items-center gap-4">
+          {/* Mobile: Cart icon */}
+          {isMobile && !hidePublicNav && (
+            <Link to="/cart" className="text-2xl text-gray-700 dark:text-white hover:scale-110 transition-transform duration-300" aria-label="Shopping Cart">
+              <FaCartShopping />
+            </Link>
+          )}
 
           {/* Desktop: Cart + Auth Buttons */}
           <div className="hidden md:flex items-center gap-6">
-            {!shouldShowAdminOnlyNav && (
+            {!hidePublicNav && (
               <Link to="/cart" className="text-3xl text-gray-700 dark:text-white hover:scale-110 transition-transform duration-300" aria-label="Shopping Cart">
                 <FaCartShopping />
               </Link>
             )}
             {!user ? (
-              !shouldShowAdminOnlyNav && (
+              !hidePublicNav && (
                 <Link to="/login" className="px-6 py-2 bg-blue-600 text-white rounded-full shadow-md hover:bg-blue-700 transform hover:scale-105 transition-all duration-300 font-semibold">
                   Login / Signup
                 </Link>
@@ -167,21 +159,18 @@ function Navbar() {
       {isMobileMenuOpen && (
         <div className="md:hidden bg-white dark:bg-blue-700 py-4 px-6 border-t border-gray-200 dark:border-blue-600">
           <div className="flex flex-col space-y-3">
-            {shouldShowAdminOnlyNav ? (
-              <Link to="/admin" className={mobileNavLinkClasses} onClick={() => setIsMobileMenuOpen(false)}>Admin Dashboard</Link>
-            ) : (
+            {!hidePublicNav ? (
               <>
                 <Link to="/" className={mobileNavLinkClasses} onClick={() => setIsMobileMenuOpen(false)}>Home</Link>
                 <Link to="/shop" className={mobileNavLinkClasses} onClick={() => setIsMobileMenuOpen(false)}>Shop</Link>
                 <Link to="/contact" className={mobileNavLinkClasses} onClick={() => setIsMobileMenuOpen(false)}>Contact</Link>
                 <Link to="/about" className={mobileNavLinkClasses} onClick={() => setIsMobileMenuOpen(false)}>About</Link>
-                {isAdmin && !isAdminRoute && (
-                  <Link to="/admin" className={mobileNavLinkClasses} onClick={() => setIsMobileMenuOpen(false)}>Admin Dashboard</Link>
-                )}
               </>
+            ) : (
+              <Link to="/admin" className={mobileNavLinkClasses} onClick={() => setIsMobileMenuOpen(false)}>Admin Dashboard</Link>
             )}
             {!user ? (
-              !shouldShowAdminOnlyNav && (
+              !hidePublicNav && (
                 <Link to="/login" className="block px-4 py-2 bg-blue-600 text-white rounded-md text-center hover:bg-blue-700 transition-colors duration-300" onClick={() => setIsMobileMenuOpen(false)}>
                   Login / Signup
                 </Link>

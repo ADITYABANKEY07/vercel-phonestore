@@ -21,11 +21,16 @@ import AdminDashboard from "./Pages/AdminDashboard";
 import AdminUserManage from "./Pages/AdminUserManage";
 import AdminAnalytics from "./Pages/AdminAnalytics";
 import ThankyouPage from "./Pages/ThankyouPage";
+import AppWrapper from "./Components/AppWrapper";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <AppLayout />,
+    element: (
+      <AppWrapper>
+        <AppLayout />
+      </AppWrapper>
+    ),
     children: [
       { path: "/", element: <Home /> },
       { path: "/login", element: <Login /> },
