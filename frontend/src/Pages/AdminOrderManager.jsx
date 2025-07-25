@@ -85,8 +85,7 @@ function AdminOrderManager() {
             <thead className="text-xs uppercase bg-gray-100 border-b">
               <tr>
                 <th className="px-4 py-3">#</th>
-                <th className="px-4 py-3">Order ID</th> {/* Added Order ID */}
-                <th className="px-4 py-3">User</th>
+                <th className="px-4 py-3">Name</th> {/* Added Order ID */}
                 <th className="px-4 py-3">Email</th>
                 <th className="px-4 py-3">Amount</th>
                 <th className="px-4 py-3">Status</th>
