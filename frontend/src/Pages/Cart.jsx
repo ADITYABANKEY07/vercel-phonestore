@@ -2,10 +2,12 @@ const BASE_URL = import.meta.env.VITE_API_URL;
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
+import loadingGif from "../images/loading.gif"; // ✅ Import the loader
 
- function CartPage() {
+function CartPage() {
   const [cartItems, setCartItems] = useState([]);
   const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true); // ✅ Track loading state
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -21,6 +23,7 @@ import { useNavigate, Link } from "react-router-dom";
 
   const fetchCartItems = async (token) => {
     try {
+      setLoading(true); // ✅ Start loading
       const res = await axios.get(`${BASE_URL}/api/cart`, {
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -31,12 +34,13 @@ import { useNavigate, Link } from "react-router-dom";
         localStorage.removeItem("user");
         navigate("/login?redirect=/cart");
       }
+    } finally {
+      setLoading(false); // ✅ End loading
     }
   };
 
   const updateItemQuantity = async (productId, newQuantity) => {
     if (!user?.token) return navigate("/login?redirect=/cart");
-
     const quantityToUpdate = Math.max(1, newQuantity);
     setCartItems((prev) =>
       prev.map((item) =>
@@ -45,14 +49,11 @@ import { useNavigate, Link } from "react-router-dom";
           : item
       )
     );
-
     try {
       await axios.put(
         `${BASE_URL}/api/cart/${productId}`,
         { quantity: quantityToUpdate },
-        {
-          headers: { Authorization: `Bearer ${user.token}` },
-        }
+        { headers: { Authorization: `Bearer ${user.token}` } }
       );
     } catch (err) {
       console.error("Update error:", err);
@@ -62,11 +63,9 @@ import { useNavigate, Link } from "react-router-dom";
 
   const removeItemFromCart = async (productId) => {
     if (!user?.token) return navigate("/login?redirect=/cart");
-
     setCartItems((prev) =>
       prev.filter((item) => item.product?._id !== productId)
     );
-
     try {
       await axios.delete(`${BASE_URL}/api/cart/${productId}`, {
         headers: { Authorization: `Bearer ${user.token}` },
@@ -95,7 +94,12 @@ import { useNavigate, Link } from "react-router-dom";
     <div className="max-w-5xl mx-auto p-6">
       <h1 className="text-3xl font-bold mb-6 text-gray-800">Your Cart</h1>
 
-      {cartItems.length === 0 ? (
+      {/* ✅ Loading Spinner */}
+      {loading ? (
+        <div className="flex justify-center items-center h-48">
+          <img src={loadingGif} alt="Loading..." className="w-16 h-16" />
+        </div>
+      ) : cartItems.length === 0 ? (
         <p className="text-center text-gray-500">Your cart is empty.</p>
       ) : (
         <div className="space-y-4">

@@ -2,6 +2,7 @@ const BASE_URL = import.meta.env.VITE_API_URL;
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
+import loadingGif from "../images/loading.gif"; // ✅ Step 2: Import
 
 const ProductDetailPage = () => {
   const { id } = useParams();
@@ -10,16 +11,13 @@ const ProductDetailPage = () => {
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
-  // ✅ Get token and user from localStorage
   const [user, setUser] = useState(() => {
     const stored = localStorage.getItem("user");
     return stored ? JSON.parse(stored) : null;
   });
 
-  // Optional: listen for external localStorage changes
   useEffect(() => {
     const handleStorageChange = () => {
-      setToken(localStorage.getItem("token"));
       const storedUser = localStorage.getItem("user");
       setUser(storedUser ? JSON.parse(storedUser) : null);
     };
@@ -27,35 +25,33 @@ const ProductDetailPage = () => {
     return () => window.removeEventListener("storage", handleStorageChange);
   }, []);
 
-const handleAddToCart = async () => {
-  const storedUser = JSON.parse(localStorage.getItem("user"));
+  const handleAddToCart = async () => {
+    const storedUser = JSON.parse(localStorage.getItem("user"));
 
-  if (!storedUser || !storedUser.token) {
-    alert('Please login to add items to cart.');
-    return navigate('/login?redirect=/cart');
-  }
+    if (!storedUser || !storedUser.token) {
+      alert("Please login to add items to cart.");
+      return navigate("/login?redirect=/cart");
+    }
 
-  try {
-    await axios.post(
-      `${BASE_URL}/api/cart/add`,
-      {
-        productId: product._id,
-        quantity: 1,
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${storedUser.token}`, // ✅ use token inside user
+    try {
+      await axios.post(
+        `${BASE_URL}/api/cart/add`,
+        {
+          productId: product._id,
+          quantity: 1,
         },
-      }
-    );
-    navigate('/cart');
-  } catch (err) {
-    console.error("Cart Add Error:", err.response?.data || err.message);
-    alert('Failed to add to cart.');
-  }
-};
-
-
+        {
+          headers: {
+            Authorization: `Bearer ${storedUser.token}`,
+          },
+        }
+      );
+      navigate("/cart");
+    } catch (err) {
+      console.error("Cart Add Error:", err.response?.data || err.message);
+      alert("Failed to add to cart.");
+    }
+  };
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -74,9 +70,23 @@ const handleAddToCart = async () => {
     fetchProduct();
   }, [id]);
 
-  if (loading) return <div className="p-10 text-center text-lg">Loading product...</div>;
-  if (error) return <div className="p-10 text-center text-red-500">Error: {error}</div>;
-  if (!product) return <div className="p-10 text-center">No product found.</div>;
+  // ✅ Loading state with GIF
+  if (loading)
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <img src={loadingGif} alt="Loading..." className="w-16 h-16 animate-spin" />
+      </div>
+    );
+
+  if (error)
+    return (
+      <div className="p-10 text-center text-red-500">Error: {error}</div>
+    );
+
+  if (!product)
+    return (
+      <div className="p-10 text-center">No product found.</div>
+    );
 
   const brand = typeof product.brand === "object" ? product.brand?.name : product.brand;
   const model = typeof product.model === "object" ? product.model?.name : product.model;

@@ -2,6 +2,7 @@ const BASE_URL = import.meta.env.VITE_API_URL;
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useLocation, Link } from "react-router-dom";
+import loadingGif from "../images/loading.gif"; // ✅ Import loading gif
 
 function FilteredProducts() {
   const location = useLocation();
@@ -12,38 +13,47 @@ function FilteredProducts() {
   const searchParams = new URLSearchParams(location.search);
   const brand = searchParams.get("brand");
   const model = searchParams.get("model");
-    const category = searchParams.get("category"); // ✅ <--- Add it here
+  const category = searchParams.get("category"); // ✅ Optional filtering
 
+  useEffect(() => {
+    const fetchFilteredProducts = async () => {
+      try {
+        setLoading(true);
+        setError(null);
 
-useEffect(() => {
-  const fetchFilteredProducts = async () => {
-    try {
-      setLoading(true);
-      setError(null);
+        const queryParams = new URLSearchParams();
+        if (brand) queryParams.append("brand", brand);
+        if (model) queryParams.append("model", model);
+        if (category) queryParams.append("category", category);
 
-      const queryParams = new URLSearchParams();
-      if (brand) queryParams.append("brand", brand);
-      if (model) queryParams.append("model", model);
-      if (category) queryParams.append("category", category); // ✅ use it here
+        const response = await axios.get(
+          `${BASE_URL}/api/products/filter?${queryParams.toString()}`
+        );
 
-      const response = await axios.get(
-        `${BASE_URL}/api/products/filter?${queryParams.toString()}`
-      );
+        setProducts(response.data);
+      } catch (err) {
+        setError(err.response?.data?.message || err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-      setProducts(response.data);
-    } catch (err) {
-      setError(err.response?.data?.message || err.message);
-    } finally {
-      setLoading(false);
-    }
-  };
+    fetchFilteredProducts();
+  }, [brand, model, category]);
 
-  fetchFilteredProducts();
-}, [brand, model, category]);
+  // ✅ Show loading GIF
+  if (loading)
+    return (
+      <div className="flex justify-center items-center min-h-[300px]">
+        <img src={loadingGif} alt="Loading..." className="w-16 h-16 animate-spin" />
+      </div>
+    );
 
+  if (error)
+    return (
+      <div className="text-center text-red-500 p-10">Error: {error}</div>
+    );
 
-  if (loading) return <div className="text-center p-10">Loading products...</div>;
-  if (error) return <div className="text-center text-red-500 p-10">Error: {error}</div>;
   if (products.length === 0)
     return (
       <div className="text-center p-10">
@@ -67,9 +77,15 @@ useEffect(() => {
                   className="w-full h-40 object-contain mb-4"
                 />
               )}
-              <h2 className="text-sm font-semibold mb-1">{product.brand} {product.model}</h2>
-              <p className="text-gray-600 text-sm mb-2 line-clamp-2">{product.description}</p>
-              <p className="text-lg font-bold text-gray-800 mb-2">${product.price.toFixed(2)}</p>
+              <h2 className="text-sm font-semibold mb-1">
+                {product.brand} {product.model}
+              </h2>
+              <p className="text-gray-600 text-sm mb-2 line-clamp-2">
+                {product.description}
+              </p>
+              <p className="text-lg font-bold text-gray-800 mb-2">
+                ${product.price.toFixed(2)}
+              </p>
               <button className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded">
                 Add to Cart
               </button>

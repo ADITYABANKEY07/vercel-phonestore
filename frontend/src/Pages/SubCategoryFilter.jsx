@@ -2,6 +2,7 @@ const BASE_URL = import.meta.env.VITE_API_URL;
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
+import loadingGif from "../images/loading.gif"; // ✅ Step 2: Import loading gif
 
 function SubCategoryFilter() {
   const { categoryName, subCategory } = useParams();
@@ -30,17 +31,18 @@ function SubCategoryFilter() {
     fetchFilteredProducts();
   }, [categoryName, subCategory]);
 
+  // ✅ Loading state with GIF
   if (loading) {
     return (
-      <div className="flex justify-center items-center h-screen text-center p-10">
-        Loading products...
+      <div className="flex justify-center items-center h-screen">
+        <img src={loadingGif} alt="Loading..." className="w-16 h-16 animate-spin" />
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="flex justify-center items-center h-screen text-center p-10 text-red-500">
+      <div className="flex justify-center items-center h-screen text-red-500 text-center p-10">
         Error: {error}
       </div>
     );
@@ -83,35 +85,22 @@ function SubCategoryFilter() {
                   {product.image && typeof product.image === "string" && (
                     <img
                       src={product.image}
-                      alt={
-                        typeof product.model === "string"
-                          ? product.model
-                          : "Product Image"
-                      }
+                      alt={typeof product.model === "string" ? product.model : "Product Image"}
                       className="w-3/4 sm:w-2/3 md:w-full max-h-40 sm:max-h-48 object-contain mb-4 rounded-md"
                     />
                   )}
 
-                  <h2 className="text-sm sm:text- text-nowrap font-semibold mb-2">
-                    {typeof product.brand === "object"
-                      ? product.brand?.name
-                      : product.brand || ""}
-                    {" "}
-                    {typeof product.model === "object"
-                      ? product.model?.name
-                      : product.model || ""}
+                  <h2 className="text-sm font-semibold mb-2 text-nowrap">
+                    {typeof product.brand === "object" ? product.brand?.name : product.brand || ""}{" "}
+                    {typeof product.model === "object" ? product.model?.name : product.model || ""}
                   </h2>
 
                   <p className="text-gray-600 mb-2 text-sm sm:text-base line-clamp-3">
-                    {typeof product.description === "string"
-                      ? product.description
-                      : ""}
+                    {typeof product.description === "string" ? product.description : ""}
                   </p>
 
                   <p className="text-gray-700 mb-2 text-base sm:text-lg font-bold">
-                    {typeof product.price === "number"
-                      ? `$${product.price.toFixed(2)}`
-                      : "N/A"}
+                    {typeof product.price === "number" ? `$${product.price.toFixed(2)}` : "N/A"}
                   </p>
 
                   <button className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded">
