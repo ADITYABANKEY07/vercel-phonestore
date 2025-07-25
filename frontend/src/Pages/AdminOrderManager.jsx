@@ -1,12 +1,15 @@
-const BASE_URL = import.meta.env.VITE_API_URL;
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom'; // ✅ Add this line
 import axios from 'axios';
-import loadingGif from '../images/loading.gif'; // 👈 Add this line
+import loadingGif from '../images/loading.gif';
+
+const BASE_URL = import.meta.env.VITE_API_URL;
 
 function AdminOrderManager() {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const navigate = useNavigate(); // ✅ Initialize navigate
   const ADMIN_URL = `${BASE_URL}/api`;
 
   useEffect(() => {
@@ -51,7 +54,6 @@ function AdminOrderManager() {
     fetchOrders();
   }, []);
 
-  // ✅ Updated loader UI here
   if (loading) {
     return (
       <div className="p-6 max-w-7xl mx-auto text-center">
@@ -75,6 +77,14 @@ function AdminOrderManager() {
 
   return (
     <div className="p-6 max-w-7xl mx-auto">
+      {/* ✅ Back Button */}
+      <button
+        onClick={() => navigate('/admin')}
+        className="mb-4 px-4 py-2 text-sm font-semibold bg-indigo-600 text-white rounded hover:bg-indigo-700 transition"
+      >
+        ← Back to Dashboard
+      </button>
+
       <h1 className="text-3xl font-bold mb-6">Admin Order Manager</h1>
 
       {Array.isArray(orders) && orders.length === 0 ? (
