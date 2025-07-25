@@ -1,43 +1,38 @@
 const BASE_URL = import.meta.env.VITE_API_URL;
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import loadingGif from '../images/loading.gif'; // 👈 Add this line
 
 function AdminOrderManager() {
   const [orders, setOrders] = useState([]);
-  const [loading, setLoading] = useState(true); // Add loading state
-  const [error, setError] = useState(null); // Add error state
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const ADMIN_URL = `${BASE_URL}/api`;
 
   useEffect(() => {
     const fetchOrders = async () => {
-      setLoading(true); // Set loading to true when fetching starts
-      setError(null); // Clear previous errors
+      setLoading(true);
+      setError(null);
       try {
-        const storedUser = localStorage.getItem('user'); // Get the whole user object
+        const storedUser = localStorage.getItem('user');
         if (!storedUser) {
-          console.warn('No user data found in localStorage. Redirecting to login or showing message.');
           setError('Please log in to view orders.');
           setLoading(false);
           return;
         }
+
         const parsedUser = JSON.parse(storedUser);
-        const token = parsedUser.token; // Extract token from user object
+        const token = parsedUser.token;
 
         if (!token) {
-          console.warn('No authentication token found in user data.');
           setError('Authentication required. Please log in.');
           setLoading(false);
           return;
         }
 
-        console.log('🚀 Frontend: Attempting to fetch orders with token:', token);
-
         const res = await axios.get(`${ADMIN_URL}/orders`, {
           headers: { Authorization: `Bearer ${token}` },
         });
-
-        // 🔍 Frontend Debug Log: Raw response data
-        console.log('📦 Frontend: Raw response data from /api/orders:', res.data);
 
         const ordersArray = Array.isArray(res.data)
           ? res.data
@@ -46,21 +41,26 @@ function AdminOrderManager() {
           : [];
 
         setOrders(ordersArray);
-        setLoading(false); // Set loading to false after successful fetch
+        setLoading(false);
       } catch (err) {
-        console.error('❌ Frontend: Error fetching orders:', err.response?.data || err.message);
         setError(`Failed to fetch orders: ${err.response?.data?.message || err.message}`);
-        setLoading(false); // Set loading to false on error
+        setLoading(false);
       }
     };
 
     fetchOrders();
   }, []);
 
+  // ✅ Updated loader UI here
   if (loading) {
     return (
-      <div className="p-6 max-w-7xl mx-auto text-center text-lg">
-        Loading orders...
+      <div className="p-6 max-w-7xl mx-auto text-center">
+        <img
+          src={loadingGif}
+          alt="Loading..."
+          className="mx-auto w-16 h-16 animate-spin"
+        />
+        <p className="mt-2 text-gray-600">Loading orders...</p>
       </div>
     );
   }
