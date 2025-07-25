@@ -48,7 +48,7 @@ import { useNavigate, Link } from "react-router-dom";
 
     try {
       await axios.put(
-        `http://localhost:3001/api/cart/${productId}`,
+        `${BASE_URL}/api/cart/${productId}`,
         { quantity: quantityToUpdate },
         {
           headers: { Authorization: `Bearer ${user.token}` },
@@ -68,7 +68,7 @@ import { useNavigate, Link } from "react-router-dom";
     );
 
     try {
-      await axios.delete(`http://localhost:3001/api/cart/${productId}`, {
+      await axios.delete(`${BASE_URL}/api/cart/${productId}`, {
         headers: { Authorization: `Bearer ${user.token}` },
       });
     } catch (err) {
