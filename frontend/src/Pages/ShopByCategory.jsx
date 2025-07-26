@@ -2,12 +2,12 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import loadingGif from "../images/loading.gif";
 
-// ✅ Swiper imports
+// Swiper imports
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/pagination";
-import "./SwiperStyles.css"; // 👈 we'll create this next
+import "./SwiperStyles.css";
 
 const BASE_URL = import.meta.env.VITE_API_URL;
 
@@ -47,6 +47,18 @@ export default function ShopByCategoryTabs() {
     fetchCategories();
   }, []);
 
+  const handleNavigate = (subcat) => {
+    const parentCategory = categories.find((cat) => cat._id === subcat.parent);
+    const categorySlug = parentCategory?.name?.toLowerCase().replace(/\s+/g, "-");
+    const subCategorySlug = subcat.name.toLowerCase().replace(/\s+/g, "-");
+
+    if (categorySlug) {
+      navigate(`/products/category/${categorySlug}/${subCategorySlug}`);
+    } else {
+      alert("Parent category not found");
+    }
+  };
+
   return (
     <div className="bg-blue-100 min-h-screen font-inter p-4 sm:p-6">
       <div className="max-w-7xl mx-auto rounded-xl p-6 sm:p-8">
@@ -82,9 +94,7 @@ export default function ShopByCategoryTabs() {
             <p className="text-gray-600 mt-2">Loading categories...</p>
           </div>
         ) : subCategories.length === 0 ? (
-          <div className="text-center text-gray-500">
-            No subcategories found.
-          </div>
+          <div className="text-center text-gray-500">No subcategories found.</div>
         ) : (
           <>
             {/* Mobile Swiper */}
@@ -92,7 +102,7 @@ export default function ShopByCategoryTabs() {
               <Swiper
                 modules={[Pagination]}
                 pagination={{ clickable: true }}
-                loop={true} // 👈 This is the correct way
+                loop={true}
                 spaceBetween={16}
                 slidesPerView={1.2}
                 className="category-swiper"
@@ -100,44 +110,28 @@ export default function ShopByCategoryTabs() {
                 {subCategories.map((subcat) => (
                   <SwiperSlide key={subcat._id}>
                     <div className="bg-white rounded-xl shadow hover:shadow-lg transition transform hover:scale-105">
-                      <img
-                        src={
-                          subcat.imageUrl ||
-                          "https://placehold.co/300x300?text=No+Image"
-                        }
-                        alt={subcat.name}
-                        className="w-full h-48 object-cover rounded-t-xl"
-                        onError={(e) => {
-                          e.target.onerror = null;
-                          e.target.src =
-                            "https://placehold.co/300x300?text=Image+Error";
-                        }}
-                      />
+                      <div onClick={() => handleNavigate(subcat)}>
+                        <img
+                          src={
+                            subcat.imageUrl ||
+                            "https://placehold.co/300x300?text=No+Image"
+                          }
+                          alt={subcat.name}
+                          className="w-full h-48 object-cover rounded-t-xl cursor-pointer"
+                          onError={(e) => {
+                            e.target.onerror = null;
+                            e.target.src =
+                              "https://placehold.co/300x300?text=Image+Error";
+                          }}
+                        />
+                      </div>
                       <div className="p-4 text-center">
                         <h3 className="text-lg font-semibold text-gray-800 mb-3">
                           {subcat.name}
                         </h3>
                         <button
                           className="w-full py-2 px-4 bg-blue-500 text-white font-medium rounded-full hover:bg-blue-600 transition"
-                          onClick={() => {
-                            const parentCategory = categories.find(
-                              (cat) => cat._id === subcat.parent
-                            );
-                            const categorySlug = parentCategory?.name
-                              ?.toLowerCase()
-                              .replace(/\s+/g, "-");
-                            const subCategorySlug = subcat.name
-                              .toLowerCase()
-                              .replace(/\s+/g, "-");
-
-                            if (categorySlug) {
-                              navigate(
-                                `/products/category/${categorySlug}/${subCategorySlug}`
-                              );
-                            } else {
-                              alert("Parent category not found");
-                            }
-                          }}
+                          onClick={() => handleNavigate(subcat)}
                         >
                           Explore Now
                         </button>
@@ -155,44 +149,28 @@ export default function ShopByCategoryTabs() {
                   key={subcat._id}
                   className="bg-white rounded-xl shadow hover:shadow-lg transition transform hover:scale-105"
                 >
-                  <img
-                    src={
-                      subcat.imageUrl ||
-                      "https://placehold.co/300x300?text=No+Image"
-                    }
-                    alt={subcat.name}
-                    className="w-full h-48 object-cover rounded-t-xl"
-                    onError={(e) => {
-                      e.target.onerror = null;
-                      e.target.src =
-                        "https://placehold.co/300x300?text=Image+Error";
-                    }}
-                  />
+                  <div onClick={() => handleNavigate(subcat)}>
+                    <img
+                      src={
+                        subcat.imageUrl ||
+                        "https://placehold.co/300x300?text=No+Image"
+                      }
+                      alt={subcat.name}
+                      className="w-full h-48 object-cover rounded-t-xl cursor-pointer"
+                      onError={(e) => {
+                        e.target.onerror = null;
+                        e.target.src =
+                          "https://placehold.co/300x300?text=Image+Error";
+                      }}
+                    />
+                  </div>
                   <div className="p-4 text-center">
                     <h3 className="text-lg font-semibold text-gray-800 mb-3">
                       {subcat.name}
                     </h3>
                     <button
                       className="w-full py-2 px-4 bg-blue-500 text-white font-medium rounded-full hover:bg-blue-600 transition"
-                      onClick={() => {
-                        const parentCategory = categories.find(
-                          (cat) => cat._id === subcat.parent
-                        );
-                        const categorySlug = parentCategory?.name
-                          ?.toLowerCase()
-                          .replace(/\s+/g, "-");
-                        const subCategorySlug = subcat.name
-                          .toLowerCase()
-                          .replace(/\s+/g, "-");
-
-                        if (categorySlug) {
-                          navigate(
-                            `/products/category/${categorySlug}/${subCategorySlug}`
-                          );
-                        } else {
-                          alert("Parent category not found");
-                        }
-                      }}
+                      onClick={() => handleNavigate(subcat)}
                     >
                       Explore Now
                     </button>
