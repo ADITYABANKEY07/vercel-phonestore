@@ -1,7 +1,8 @@
-const BASE_URL = import.meta.env.VITE_API_URL;
-import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import loadingGif from "../images/loading.gif"; // 👈 Import your loading gif
 
+const BASE_URL = import.meta.env.VITE_API_URL;
 export default function ShopByCategoryTabs() {
   const SHOP_URL = `${BASE_URL}/api`;
 
@@ -10,9 +11,6 @@ export default function ShopByCategoryTabs() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  {
-    /* // inside your component */
-  }
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -22,10 +20,8 @@ export default function ShopByCategoryTabs() {
         const res = await fetch(`${SHOP_URL}/categories`);
         if (!res.ok) throw new Error(`Error: ${res.status}`);
         const data = await res.json();
-        console.log("Fetched categories:", data); // Debug log
         setCategories(data);
 
-        // Default tab: first main category
         const firstMain = data.find((cat) => !cat.parent);
         setActiveTab(firstMain?._id);
       } catch (err) {
@@ -39,7 +35,6 @@ export default function ShopByCategoryTabs() {
     fetchCategories();
   }, []);
 
-  // Make sure to compare string values of IDs
   const mainCategories = categories.filter((cat) => !cat.parent);
   const subCategories = categories.filter(
     (cat) => String(cat.parent) === String(activeTab)
@@ -54,7 +49,6 @@ export default function ShopByCategoryTabs() {
 
         {error && <div className="text-red-500 text-center mb-4">{error}</div>}
 
-        {/* Tabs */}
         <div className="flex flex-wrap gap-3 justify-center mb-6">
           {mainCategories.map((cat) => (
             <button
@@ -71,9 +65,16 @@ export default function ShopByCategoryTabs() {
           ))}
         </div>
 
-        {/* Subcategory Cards */}
+        {/* ✅ Loading State with GIF */}
         {loading ? (
-          <div className="text-center text-gray-500">Loading...</div>
+          <div className="text-center">
+            <img
+              src={loadingGif}
+              alt="Loading..."
+              className="mx-auto w-16 h-16 animate-spin"
+            />
+            <p className="text-gray-600 mt-2">Loading categories...</p>
+          </div>
         ) : subCategories.length === 0 ? (
           <div className="text-center text-gray-500">
             No subcategories found.
