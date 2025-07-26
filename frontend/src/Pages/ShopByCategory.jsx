@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import loadingGif from "../images/loading.gif"; // 👈 Import your loading gif
 
 const BASE_URL = import.meta.env.VITE_API_URL;
@@ -10,6 +10,12 @@ export default function ShopByCategoryTabs() {
   const [activeTab, setActiveTab] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const scrollContainerRef = useRef(null);
+  const mainCategories = categories.filter((cat) => !cat.parent);
+  const subCategories = categories.filter(
+    (cat) => String(cat.parent) === String(activeTab)
+  );
 
   const navigate = useNavigate();
 
@@ -35,10 +41,23 @@ export default function ShopByCategoryTabs() {
     fetchCategories();
   }, []);
 
-  const mainCategories = categories.filter((cat) => !cat.parent);
-  const subCategories = categories.filter(
-    (cat) => String(cat.parent) === String(activeTab)
-  );
+  useEffect(() => {
+    const container = scrollContainerRef.current;
+    if (!container) return;
+
+    const handleScroll = () => {
+      const scrollLeft = container.scrollLeft;
+      const cardWidth = 260; // Adjust based on your `min-w-[...]`
+      const index = Math.round(scrollLeft / cardWidth);
+      setCurrentSlide(index);
+    };
+
+    container.addEventListener("scroll", handleScroll, { passive: true });
+
+    return () => {
+      container.removeEventListener("scroll", handleScroll);
+    };
+  }, [subCategories]);
 
   return (
     <div className="bg-blue-100 min-h-screen font-inter p-4 sm:p-6">
@@ -80,11 +99,14 @@ export default function ShopByCategoryTabs() {
             No subcategories found.
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-6">
+          <div
+            ref={scrollContainerRef}
+            className="flex overflow-x-auto md:overflow-hidden gap-4 sm:grid sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 scroll-smooth snap-x snap-mandatory"
+          >
             {subCategories.map((subcat) => (
               <div
                 key={subcat._id}
-                className="bg-white rounded-xl shadow hover:shadow-lg transform transition duration-300 hover:scale-105"
+                className="min-w-[250px] flex-shrink-0 snap-start sm:min-w-0 bg-white rounded-xl shadow hover:shadow-lg transform transition duration-300 hover:scale-105"
               >
                 <img
                   src={
@@ -132,6 +154,17 @@ export default function ShopByCategoryTabs() {
             ))}
           </div>
         )}
+                    {/* Pagination Dots - only for mobile view */}
+            <div className="flex justify-center mt-4 sm:hidden">
+              {subCategories.map((_, index) => (
+                <span
+                  key={index}
+                  className={`w-2.5 h-2.5 mx-1 rounded-full ${
+                    index === currentSlide ? "bg-blue-600" : "bg-gray-300"
+                  }`}
+                ></span>
+              ))}
+            </div>
       </div>
     </div>
   );
