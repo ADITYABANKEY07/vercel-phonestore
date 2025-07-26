@@ -92,6 +92,7 @@ export default function ShopByCategoryTabs() {
               <Swiper
                 modules={[Pagination]}
                 pagination={{ clickable: true }}
+                loop={true} // 👈 This is the correct way
                 spaceBetween={16}
                 slidesPerView={1.2}
                 className="category-swiper"
