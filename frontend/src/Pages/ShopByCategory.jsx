@@ -132,7 +132,7 @@ const BASE_URL = import.meta.env.VITE_API_URL;
                         />
                       </div>
                       <div className="p-4 text-center">
-                        <h3 className="text-lg font-semibold text-gray-800 mb-3">
+                        <h3 className="text-lg font-semibold text-gray-800 mb-3 text-nowrap">
                           {subcat.name}
                         </h3>
                         <button
