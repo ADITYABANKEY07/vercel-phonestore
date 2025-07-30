@@ -6,15 +6,20 @@
 
 
 .dot {
+  width: 1rem;
+  height: 1rem;
+  border-radius: 50%; /* Makes it circular */
   transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
 }
+
 .dot.active {
-  width: 2.5rem;
-  border-radius: 1.25rem;
-  background: white; /* Or your accent color */
+  background: white; /* Or your primary color */
+  transform: scale(1.2); /* Slightly enlarges the active dot */
 }
+
 .dot.inactive {
-  width: 1rem;
-  background: #cbd5e1; /* Gray-300 for Tailwind, for example */
+  background: #cbd5e1; /* Gray-300 */
+  opacity: 0.7;
 }
+
 
