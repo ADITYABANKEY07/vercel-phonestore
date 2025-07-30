@@ -1,4 +1,12 @@
 import React, { useState } from 'react';
+import google from "../images/google.png";
+import apple from "../images/apple.png";
+import samsung from "../images/samsung.png";
+import oppo from "../images/oppo.png";
+import vivo from "../images/vivo.png";
+import mi from "../images/mi.png";
+import motorola from "../images/motorola.png";
+
 
 // Main App component
 const BrandCarousel = () => {
@@ -7,65 +15,46 @@ const BrandCarousel = () => {
     {
       name: 'iPhone',
       logo: (
-        <svg viewBox="0 0 16 16" className="w-10 h-10 fill-current text-blue-600">
-        <path d="M11.666 0c.92 0 1.667.746 1.667 1.667v12.666c0 .92-.747 1.667-1.667 1.667H4.333c-.92 0-1.666-.747-1.666-1.667V1.667C2.667.746 3.413 0 4.333 0h7.333zM8 14.333c-.69 0-1.25-.56-1.25-1.25s.56-1.25 1.25-1.25 1.25.56 1.25 1.25-.56 1.25-1.25 1.25zM10.833 2.5H5.167c-.23 0-.417-.187-.417-.417s.187-.416.417-.416h5.666c.23 0 .417.186.417.416s-.187.417-.417.417z" />
-        </svg>
+        <img src={apple} className="w-10 h-10 fill-current text-blue-600"/>
       ),
     },
     {
-      name: 'Motorola',
+      name: 'Google',
       logo: (
-        <svg viewBox="0 0 24 24" className="w-10 h-10 fill-current text-blue-600">
-          <path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm0 1.5c4.694 0 8.5 3.806 8.5 8.5S16.694 20.5 12 20.5 3.5 16.694 3.5 12 7.306 3.5 12 3.5zM12 5c-3.866 0-7 3.134-7 7s3.134 7 7 7 7-3.134 7-7-3.134-7-7-7zm0 1.5c3.033 0 5.5 2.467 5.5 5.5S15.033 17.5 12 17.5 6.5 15.033 6.5 12 8.967 6.5 12 6.5zm0 1.5c2.209 0 4 1.791 4 4s-1.791 4-4 4-4-1.791-4-4 1.791-4 4-4z" />
-        </svg>
-      ),
-    },
-    {
-      name: 'Pixel',
-      logo: (
-        <svg viewBox="0 0 24 24" className="w-10 h-10 fill-current text-blue-600">
-          <path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm0 1.5c4.694 0 8.5 3.806 8.5 8.5S16.694 20.5 12 20.5 3.5 16.694 3.5 12 7.306 3.5 12 3.5zM12 5c-3.866 0-7 3.134-7 7s3.134 7 7 7 7-3.134 7-7-3.134-7-7-7zm0 1.5c2.209 0 4 1.791 4 4s-1.791 4-4 4-4-1.791-4-4 1.791-4 4-4z" />
-        </svg>
+        <img src={google} className="w-10 h-10 fill-current text-blue-600"/>
       ),
     },
     {
       name: 'Samsung',
       logo: (
-        <svg viewBox="0 0 24 24" className="w-10 h-10 fill-current text-blue-600">
-          <path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm0 1.5c4.694 0 8.5 3.806 8.5 8.5S16.694 20.5 12 20.5 3.5 16.694 3.5 12 7.306 3.5 12 3.5zM12 5c-3.866 0-7 3.134-7 7s3.134 7 7 7 7-3.134 7-7-3.134-7-7-7zm0 1.5c2.209 0 4 1.791 4 4s-1.791 4-4 4-4-1.791-4-4 1.791-4 4-4z" />
-        </svg>
+        <img src={samsung} className="w-20 h-20 fill-current text-blue-600"/>
+      ),
+    },
+    {
+      name: 'Xiaomi',
+      logo: (
+        <img src={mi} className="w-10 h-10 fill-current text-blue-600"/>
+      ),
+    },
+    {
+      name: 'Oppo',
+      logo: (
+        <img src={oppo} className="w-20 h-20 fill-current text-blue-600"/>
       ),
     },
     {
       name: 'Vivo',
       logo: (
-        <svg viewBox="0 0 24 24" className="w-10 h-10 fill-current text-blue-600">
-          <path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm0 1.5c4.694 0 8.5 3.806 8.5 8.5S16.694 20.5 12 20.5 3.5 16.694 3.5 12 7.306 3.5 12 3.5zM12 5c-3.866 0-7 3.134-7 7s3.134 7 7 7 7-3.134 7-7-3.134-7-7-7zm0 1.5c2.209 0 4 1.791 4 4s-1.791 4-4 4-4-1.791-4-4 1.791-4 4-4z" />
-        </svg>
+        <img src={vivo} className="w-20 h-20 fill-current text-blue-600"/>
       ),
     },
     {
-      name: 'IQOO',
+      name: 'Motorola',
       logo: (
-        <svg viewBox="0 0 24 24" className="w-10 h-10 fill-current text-blue-600">
-          <path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm0 1.5c4.694 0 8.5 3.806 8.5 8.5S16.694 20.5 12 20.5 3.5 16.694 3.5 12 7.306 3.5 12 3.5zM12 5c-3.866 0-7 3.134-7 7s3.134 7 7 7 7-3.134 7-7-3.134-7-7-7zm0 1.5c2.209 0 4 1.791 4 4s-1.791 4-4 4-4-1.791-4-4 1.791-4 4-4z" />
-        </svg>
+        <img src={motorola} className="w-15 h-15 fill-current text-blue-600"/>
       ),
     },
-    {
-      name: 'Mi',
-      logo: (
-        <svg viewBox="0 0 24 24" className="w-10 h-10 fill-current text-blue-600">
-          <path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm0 1.5c4.694 0 8.5 3.806 8.5 8.5S16.694 20.5 12 20.5 3.5 16.694 3.5 12 7.306 3.5 12 3.5zM12 5c-3.866 0-7 3.134-7 7s3.134 7 7 7 7-3.134 7-7-3.134-7-7-7zm0 1.5c2.209 0 4 1.791 4 4s-1.791 4-4 4-4-1.791-4-4 1.791-4 4-4z" />
-        </svg>
-      ),
-    },
-    {
-      name: 'Realme',
-      logo: (
-        <svg viewBox="0 0 24 24" className="w-10 h-10 fill-current text-blue-600"/>
-      )
-    }
+    
   ];
 
   // State for current page in the slider (for pagination dots)
