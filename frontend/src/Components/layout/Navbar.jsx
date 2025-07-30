@@ -64,7 +64,7 @@ function Navbar() {
   const hidePublicNav = isAdmin;
 
   return (
-    <nav className="shadow-lg sticky top-0 z-50 bg-blue-400 ">
+    <nav className="shadow-lg sticky top-0 z-50 bg-blue-500 ">
       <div className="container mx-auto px-6 py-4 flex justify-between items-center relative">
         {/* Mobile Hamburger */}
         {isMobile && (
