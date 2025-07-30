@@ -11,7 +11,7 @@ import "./SwiperStyles.css";
 
 const BASE_URL = import.meta.env.VITE_API_URL;
 
-export default function ShopByCategoryTabs() {
+ function ShopByCategory() {
   const SHOP_URL = `${BASE_URL}/api`;
   const navigate = useNavigate();
 
@@ -31,14 +31,19 @@ export default function ShopByCategoryTabs() {
       try {
         const res = await fetch(`${SHOP_URL}/categories`);
         if (!res.ok) throw new Error(`Error: ${res.status}`);
+
         const data = await res.json();
+
+        if (!Array.isArray(data)) throw new Error("Invalid category data");
+
         setCategories(data);
 
         const firstMain = data.find((cat) => !cat.parent);
-        setActiveTab(firstMain?._id);
+        if (firstMain) setActiveTab(firstMain._id);
+        else setError("No main categories found");
       } catch (err) {
         console.error("Fetch error:", err);
-        setError(err.message);
+        setError(err.message || "Something went wrong");
       } finally {
         setLoading(false);
       }
@@ -112,6 +117,7 @@ export default function ShopByCategoryTabs() {
                     <div className="bg-white rounded-xl shadow hover:shadow-lg transition transform hover:scale-105">
                       <div onClick={() => handleNavigate(subcat)}>
                         <img
+                          loading="lazy"
                           src={
                             subcat.imageUrl ||
                             "https://placehold.co/300x300?text=No+Image"
@@ -151,6 +157,7 @@ export default function ShopByCategoryTabs() {
                 >
                   <div onClick={() => handleNavigate(subcat)}>
                     <img
+                      loading="lazy"
                       src={
                         subcat.imageUrl ||
                         "https://placehold.co/300x300?text=No+Image"
@@ -184,3 +191,5 @@ export default function ShopByCategoryTabs() {
     </div>
   );
 }
+
+export default ShopByCategory;
